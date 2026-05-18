@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ROC Availability Tracker - How To Update Roster</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 50px auto;
+            padding: 20px;
+            background-color: #121212;
+            color: #e0e0e0;
+        }
+        h1, h2, h3 {
+            color: #ff8c00;
+        }
+        .instruction-box {
+            background-color: #1e1e1e;
+            border-radius: 8px;
+            padding: 20px;
+            margin: 20px 0;
+        }
+        code {
+            background-color: #333;
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-family: monospace;
+        }
+        pre {
+            background-color: #333;
+            padding: 15px;
+            border-radius: 4px;
+            overflow-x: auto;
+            white-space: pre-wrap;
+        }
+        .button {
+            display: inline-block;
+            background-color: #ff8c00;
+            color: white;
+            padding: 10px 20px;
+            text-decoration: none;
+            border-radius: 4px;
+            margin-top: 20px;
+            cursor: pointer;
+        }
+        .important {
+            border-left: 4px solid #ff8c00;
+            padding-left: 15px;
+            margin: 20px 0;
+        }
+        ol li, ul li {
+            margin-bottom: 10px;
+        }
+        .success {
+            color: #4CAF50;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <h1>ROC Availability Tracker - How To Update Roster</h1>
+    
+    <div class="instruction-box">
+        <h2>Update Completed Successfully!</h2>
+        <p class="success">✓ Your ROC Availability Tracker now displays your custom roster data!</p>
+        
+        <p>The application has been updated to directly display your custom roster with all team members:</p>
+        <ul>
+            <li>Komal Muruskar</li>
+            <li>Tarishi Bishnoi</li>
+            <li>Mayuresh Rajput</li>
+            <li>Gitanjali</li>
+            <li>Aryamol</li>
+            <li>Harimar</li>
+            <li>Deepak</li>
+            <li>Suresh</li>
+            <li>Sanjay</li>
+            <li>Pranita</li>
+            <li>Binil</li>
+            <li>Kuldeep</li>
+        </ul>
+    </div>
+    
+    <div class="instruction-box">
+        <h2>How To See Your Roster Data</h2>
+        
+        <ol>
+            <li>
+                <strong>Clear Your Browser Cache</strong><br>
+                Press <code>Ctrl+F5</code> (Windows) or <code>Cmd+Shift+R</code> (Mac) to force a complete refresh
+            </li>
+            <li>
+                <strong>Open index.html</strong><br>
+                Use this direct link: <a href="index.html?t=0" class="button">Open ROC Availability Tracker</a>
+            </li>
+            <li>
+                <strong>Verify Your Data</strong><br>
+                You should see your custom roster data displayed in the "Currently Available Staff" section
+            </li>
+        </ol>
+        
+        <div class="important">
+            <p><strong>Important:</strong> If you see a "Refresh Roster Data" button on the page, click it to ensure the latest data is displayed.</p>
+        </div>
+    </div>
+    
+    <div class="instruction-box">
+        <h2>What's Changed?</h2>
+        
+        <p>The following improvements have been made:</p>
+        
+        <ul>
+            <li>
+                <strong>Direct Data Integration</strong><br>
+                Your custom roster data has been directly integrated into the application
+            </li>
+            <li>
+                <strong>Reliable Loading</strong><br>
+                The application no longer attempts to read the CSV file, which caused browser security issues
+            </li>
+            <li>
+                <strong>Persistent Storage</strong><br>
+                Your roster data is now saved in the browser's local storage for faster loading
+            </li>
+            <li>
+                <strong>Manual Refresh Option</strong><br>
+                A refresh button has been added to force reload the data if needed
+            </li>
+        </ul>
+    </div>
+    
+    <div class="instruction-box">
+        <h2>Alternative Viewing Options</h2>
+        
+        <p>In addition to the main index.html page, you can also use:</p>
+        
+        <ul>
+            <li>
+                <strong>Direct Viewer</strong><br>
+                A simplified view that displays just the roster data: <a href="direct-view.html" class="button">Open Direct Viewer</a>
+            </li>
+            <li>
+                <strong>Copy Script</strong><br>
+                If you need to update the roster in the future, use the <code>copy-roster.bat</code> script to install a new roster.csv file
+            </li>
+        </ul>
+    </div>
+    
+    <div class="instruction-box">
+        <h2>Return to Application</h2>
+        <a href="index.html?t=0" class="button">Open ROC Availability Tracker</a>
+    </div>
+</body>
+</html>

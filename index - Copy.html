@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ROC Availability Tracker</title>
+    <!-- Use relative paths with ./ prefix for better compatibility with GitHub Pages -->
+    <link rel="stylesheet" href="./css/styles.css">
+    <!-- Third-party libraries -->
+    <script src="./lib/xlsx.full.min.js" defer></script>
+    <script src="./lib/papaparse.min.js" defer></script>
+    <script src="./lib/dayjs.min.js" defer></script>
+    <!-- Application scripts -->
+    <script>
+        // Basic error handling for troubleshooting
+        window.addEventListener('error', function(e) {
+            console.error('JavaScript Error:', e.message);
+            alert('JavaScript Error: ' + e.message + ' at ' + e.filename + ':' + e.lineno);
+        });
+    </script>
+    <script src="./js/fileProcessor.js" defer></script>
+    <script src="./js/availabilityChecker.js" defer></script>
+    <script src="./js/app.js" defer></script>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>ROC Availability Tracker</h1>
+            <div id="current-date-time" class="header-time"></div>
+        </header>
+        
+        <main>
+            <section class="available-staff">
+                <h2>Currently Available Staff</h2>
+                <div id="available-staff-list" class="staff-list">
+                    <!-- Available staff will be displayed here -->
+                    <div class="no-staff-message">Upload a roster to see available staff</div>
+                </div>
+            </section>
+
+            <section class="roc-team-info">
+                <h2>Not much aware about ROC team?</h2>
+                <p class="roc-team-link">lets explore <a href="https://gate51.orange.be/" target="_blank">ROC TECH-M(ORANGE)</a></p>
+            </section>
+
+
+            <section class="upload-section">
+                <h2>Upload Monthly Roster</h2>
+                <p>Upload your roster file (Excel or CSV format)</p>
+                <div class="upload-container">
+                    <input type="file" id="roster-upload" accept=".csv, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel">
+                    <button id="upload-btn">Upload Roster</button>
+                </div>
+                <div class="file-info" id="file-info"></div>
+                <div id="data-persistence-status" class="data-persistence-status"></div>
+            </section>
+        </main>
+
+        <footer>
+            <p>ROC Availability Tracker | Client-side Application | Data is stored locally | <a href="./troubleshooting.html" style="color: #3498db; text-decoration: none;">Troubleshooting Guide</a></p>
+        </footer>
+    </div>
+</body>
+</html>

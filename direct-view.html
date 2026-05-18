@@ -1,0 +1,335 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Expires" content="0">
+    <title>ROC Direct Roster View</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #121212;
+            color: #e0e0e0;
+            margin: 0;
+            padding: 20px;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid #333;
+        }
+        h1, h2 {
+            color: #ff8c00;
+        }
+        .staff-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            grid-gap: 20px;
+            margin-top: 20px;
+        }
+        .staff-card {
+            background-color: #1e1e1e;
+            border-left: 4px solid #4CAF50;
+            border-radius: 4px;
+            padding: 15px;
+        }
+        .staff-name {
+            color: #ff8c00;
+            font-size: 1.5em;
+            margin-top: 0;
+        }
+        .controls {
+            margin: 20px 0;
+            padding: 15px;
+            background-color: #1e1e1e;
+            border-radius: 4px;
+        }
+        button {
+            background-color: #ff8c00;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            margin: 5px;
+            cursor: pointer;
+            border-radius: 4px;
+        }
+        button.green {
+            background-color: #4CAF50;
+        }
+        footer {
+            margin-top: 40px;
+            text-align: center;
+            padding-top: 10px;
+            border-top: 1px solid #333;
+        }
+        .status {
+            padding: 15px;
+            margin: 15px 0;
+            background-color: #1e1e1e;
+            border-radius: 4px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>ROC Direct Roster View</h1>
+            <div id="current-date-time" class="header-time"></div>
+        </header>
+
+        <div class="controls">
+            <h2>Direct Roster View</h2>
+            <p>This page directly reads and displays your roster.csv file from the data directory.</p>
+            <button id="loadRosterBtn" class="green">Load Roster Data</button>
+            <button id="clearStorageBtn">Clear Browser Storage</button>
+            <button id="returnToMainBtn">Return to Main App</button>
+        </div>
+        
+        <div id="status" class="status">
+            Status: Ready to load roster data
+        </div>
+
+        <div id="staff-container">
+            <h2>ROC Staff Roster</h2>
+            <div id="staff-list" class="staff-list">
+                <!-- Staff cards will be displayed here -->
+                <div class="no-staff-message">Click "Load Roster Data" to view the roster</div>
+            </div>
+        </div>
+
+        <footer>
+            <p>ROC Direct Roster View | Data is loaded directly from roster.csv</p>
+        </footer>
+    </div>
+
+    <script>
+        // Update the date and time
+        function updateDateTime() {
+            const now = new Date();
+            document.getElementById('current-date-time').textContent = now.toLocaleString();
+        }
+        updateDateTime();
+        setInterval(updateDateTime, 1000);
+        
+        // Load roster data button
+        document.getElementById('loadRosterBtn').addEventListener('click', function() {
+            loadRosterData();
+        });
+        
+        // Clear storage button
+        document.getElementById('clearStorageBtn').addEventListener('click', function() {
+            localStorage.clear();
+            document.getElementById('status').innerHTML = 'Status: Browser storage cleared successfully';
+            this.textContent = '✓ Storage Cleared';
+            this.style.backgroundColor = '#4CAF50';
+        });
+        
+        // Return to main app
+        document.getElementById('returnToMainBtn').addEventListener('click', function() {
+            const timestamp = new Date().getTime();
+            window.location.href = `index.html?t=${timestamp}`;
+        });
+        
+        // Load roster data directly from file
+        function loadRosterData() {
+            const statusElement = document.getElementById('status');
+            statusElement.innerHTML = 'Status: Loading roster data...';
+            
+            // Use XMLHttpRequest to load the CSV file with cache busting
+            const xhr = new XMLHttpRequest();
+            const timestamp = new Date().getTime();
+            xhr.open('GET', `./data/roster.csv?t=${timestamp}`, true);
+            xhr.setRequestHeader('Cache-Control', 'no-cache, no-store, must-revalidate');
+            xhr.setRequestHeader('Pragma', 'no-cache');
+            xhr.setRequestHeader('Expires', '0');
+            
+            xhr.onload = function() {
+                if (xhr.status === 200) {
+                    // Parse CSV data
+                    const csvData = xhr.responseText;
+                    const lines = csvData.split('\n');
+                    
+                    // Extract headers
+                    const headers = lines[0].split(',').map(header => header.trim());
+                    
+                    // Parse the data
+                    const data = [];
+                    for (let i = 1; i < lines.length; i++) {
+                        if (!lines[i].trim()) continue; // Skip empty lines
+                        
+                        const values = lines[i].split(',');
+                        const entry = {};
+                        
+                        // Handle quoted values with commas inside
+                        let field = '';
+                        let inQuote = false;
+                        let j = 0;
+                        
+                        headers.forEach((header, index) => {
+                            if (j >= values.length) {
+                                entry[header] = '';
+                                return;
+                            }
+                            
+                            let value = values[j].trim();
+                            
+                            // Handle quoted values with commas
+                            if (value.startsWith('"') && !value.endsWith('"') && value.length > 1) {
+                                inQuote = true;
+                                field = value.substring(1);
+                                j++;
+                                while (j < values.length && inQuote) {
+                                    if (values[j].endsWith('"')) {
+                                        field += ',' + values[j].substring(0, values[j].length - 1);
+                                        inQuote = false;
+                                    } else {
+                                        field += ',' + values[j];
+                                    }
+                                    j++;
+                                }
+                                entry[header] = field;
+                            } else {
+                                // Clean up quotes if they exist
+                                if (value.startsWith('"') && value.endsWith('"')) {
+                                    value = value.substring(1, value.length - 1);
+                                }
+                                
+                                entry[header] = value;
+                                j++;
+                            }
+                        });
+                        
+                        data.push(entry);
+                    }
+                    
+                    // Display the staff
+                    displayStaffCards(data);
+                    
+                    // Update status
+                    statusElement.innerHTML = `Status: Successfully loaded roster data - ${data.length} staff members found`;
+                } else {
+                    statusElement.innerHTML = `Status: Error loading roster data - ${xhr.status} ${xhr.statusText}`;
+                    
+                    // Alternative manual method if automatic loading fails
+                    offerManualFileUpload();
+                }
+            };
+            
+            xhr.onerror = function() {
+                statusElement.innerHTML = 'Status: Error loading roster data - network error or CORS issue';
+                
+                // Alternative manual method if automatic loading fails
+                offerManualFileUpload();
+            };
+            
+            xhr.send();
+        }
+        
+        // Offer manual file upload option if automatic loading fails
+        function offerManualFileUpload() {
+            const staffList = document.getElementById('staff-list');
+            staffList.innerHTML = `
+                <div style="grid-column: 1 / -1; padding: 20px; background-color: #1e1e1e; border-radius: 4px;">
+                    <h3>Automatic loading failed. Try manual upload:</h3>
+                    <input type="file" id="manual-file-input" accept=".csv">
+                    <button id="manual-load-btn" class="green" style="margin-top: 10px;">Load Selected File</button>
+                </div>
+            `;
+            
+            document.getElementById('manual-load-btn').addEventListener('click', function() {
+                const fileInput = document.getElementById('manual-file-input');
+                const file = fileInput.files[0];
+                
+                if (!file) {
+                    alert('Please select a CSV file first');
+                    return;
+                }
+                
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    // Parse and display the CSV data
+                    const csvData = e.target.result;
+                    const lines = csvData.split('\n');
+                    
+                    // Extract headers
+                    const headers = lines[0].split(',').map(header => header.trim());
+                    
+                    // Parse the data
+                    const data = [];
+                    for (let i = 1; i < lines.length; i++) {
+                        if (!lines[i].trim()) continue; // Skip empty lines
+                        
+                        const values = lines[i].split(',');
+                        const entry = {};
+                        
+                        headers.forEach((header, index) => {
+                            entry[header] = values[index] ? values[index].trim() : '';
+                        });
+                        
+                        data.push(entry);
+                    }
+                    
+                    // Display the staff
+                    displayStaffCards(data);
+                    
+                    // Update status
+                    document.getElementById('status').innerHTML = 
+                        `Status: Successfully loaded roster data from uploaded file - ${data.length} staff members found`;
+                };
+                
+                reader.onerror = function() {
+                    document.getElementById('status').innerHTML = 
+                        'Status: Error reading the uploaded file';
+                };
+                
+                reader.readAsText(file);
+            });
+        }
+        
+        // Display staff cards
+        function displayStaffCards(staffData) {
+            const staffList = document.getElementById('staff-list');
+            
+            // Clear previous content
+            staffList.innerHTML = '';
+            
+            if (!staffData || staffData.length === 0) {
+                staffList.innerHTML = '<div class="no-staff-message">No staff members found in roster data</div>';
+                return;
+            }
+            
+            // Create a card for each staff member
+            staffData.forEach(staff => {
+                const card = document.createElement('div');
+                card.className = 'staff-card';
+                
+                card.innerHTML = `
+                    <h3 class="staff-name">${staff.Name || 'Unknown'}</h3>
+                    <p><strong>Team:</strong> ${staff.Team || 'N/A'}</p>
+                    <p><strong>Bio:</strong> ${staff.Bio || 'N/A'}</p>
+                    <p><strong>Schedule:</strong> ${staff.Schedule || 'N/A'}</p>
+                    <p><strong>Certifications:</strong> ${staff.Certifications || 'N/A'}</p>
+                    <p><strong>Email:</strong> ${staff.Email || 'N/A'}</p>
+                `;
+                
+                staffList.appendChild(card);
+            });
+        }
+        
+        // Auto-load the roster data when the page loads
+        window.addEventListener('DOMContentLoaded', function() {
+            // Load after a slight delay to ensure page is rendered
+            setTimeout(loadRosterData, 500);
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Expires" content="0">
+    <title>ROC Availability Tracker</title>
+    <!-- Use relative paths with ./ prefix for better compatibility with GitHub Pages -->
+    <link rel="stylesheet" href="./css/styles.css">
+    <!-- Third-party libraries -->
+    <script src="./lib/xlsx.full.min.js" defer></script>
+    <script src="./lib/papaparse.min.js" defer></script>
+    <script src="./lib/dayjs.min.js" defer></script>
+    <!-- Application scripts -->
+    <script>
+        // Enhanced error handling for troubleshooting
+        window.addEventListener('error', function(e) {
+            console.error('JavaScript Error:', e);
+            const errorDetails = `
+Error: ${e.message}
+File: ${e.filename || 'unknown'}
+Line: ${e.lineno || 'unknown'}
+Column: ${e.colno || 'unknown'}
+Stack: ${e.error?.stack || 'unavailable'}
+`;
+            console.error(errorDetails);
+            
+            // Only show alert if not a cross-origin error
+            if (e.filename || e.message !== 'Script error.') {
+                alert(`JavaScript Error: ${e.message}\nSee console for details.`);
+            } else {
+                console.warn('Cross-origin script error detected. This is likely from a third-party script.');
+                // Create a visible error message in the UI instead of an alert
+                const errorDiv = document.createElement('div');
+                errorDiv.style.padding = '10px';
+                errorDiv.style.margin = '10px 0';
+                errorDiv.style.backgroundColor = '#ffdddd';
+                errorDiv.style.border = '1px solid #ff0000';
+                errorDiv.style.borderRadius = '4px';
+                errorDiv.style.color = '#990000';
+                errorDiv.innerHTML = `
+                    <strong>JavaScript Error Detected</strong>
+                    <p>A potential issue was detected with third-party scripts. The application will try to continue loading.</p>
+                    <p>If you see this message, some features may not work correctly.</p>
+                `;
+                
+                // Add to page after it loads
+                document.addEventListener('DOMContentLoaded', function() {
+                    const container = document.querySelector('.container');
+                    if (container) {
+                        container.prepend(errorDiv);
+                    }
+                });
+            }
+        });
+        
+        // Also catch unhandled promise rejections
+        window.addEventListener('unhandledrejection', function(event) {
+            console.error('Unhandled Promise Rejection:', event.reason);
+            if (event.reason && event.reason.stack) {
+                console.error('Stack:', event.reason.stack);
+            }
+        });
+    </script>
+    <script src="./js/fileProcessor.js" defer></script>
+    <script src="./js/availabilityChecker.js" defer></script>
+    <script src="./js/app.js" defer></script>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>ROC Availability Tracker</h1>
+            <div id="current-date-time" class="header-time"></div>
+        </header>
+        
+        <main>
+            <section class="available-staff">
+                <h2>Currently Available Staff</h2>
+                <div id="available-staff-list" class="staff-list">
+                    <!-- Available staff will be displayed here -->
+                    <div class="no-staff-message">No staff members are currently available</div>
+                </div>
+            </section>
+
+            <section class="roc-team-info">
+                <div class="roc-team-content">
+                    <div class="roc-team-text">
+                        <h2>Not much aware about ROC?</h2>
+                        <p class="roc-team-link">Lets explore <a href="https://gate51.orange.be/" target="_blank">ROC TECHM(ORANGE)</a></p>
+                    </div>
+                    <div class="roc-team-image">
+                        <img src="img/roc-team.png" alt="ROC Team Structure" id="roc-team-img">
+                    </div>
+                </div>
+            </section>
+
+
+            <!-- Roster Status Section -->
+            <section class="status-section">
+                <h2>Roster Status</h2>
+                <p>The roster is automatically loaded from the system.</p>
+                <div class="file-info" id="file-info"></div>
+                <div id="data-persistence-status" class="data-persistence-status hidden"></div>
+            </section>
+        </main>
+
+        <footer>
+            <p>ROC Availability Tracker | Client-side Application | Data is stored locally | <a href="./troubleshooting.html" style="color: #ff8c00; text-decoration: none;">Troubleshooting Guide</a></p>
+        </footer>
+    </div>
+</body>
+</html>

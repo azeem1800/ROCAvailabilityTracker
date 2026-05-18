@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Clear LocalStorage</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 600px;
+            margin: 50px auto;
+            padding: 20px;
+            background-color: #121212;
+            color: #e0e0e0;
+            text-align: center;
+        }
+        button {
+            background-color: #ff8c00;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
+            margin: 20px;
+            border-radius: 4px;
+        }
+        .message {
+            margin-top: 20px;
+            padding: 15px;
+            border-radius: 4px;
+        }
+        .success {
+            background-color: #333;
+            border-left: 4px solid #4CAF50;
+        }
+    </style>
+</head>
+<body>
+    <h1>Clear Browser Storage</h1>
+    <p>Use this tool to clear the saved roster data and cached information from your browser.</p>
+    
+    <button id="clearButton">Clear LocalStorage Data</button>
+    
+    <div id="message"></div>
+    
+    <script>
+        // Clear localStorage and reload page
+        document.getElementById('clearButton').addEventListener('click', function() {
+            try {
+                // List the items being cleared
+                let items = [];
+                for (let i = 0; i < localStorage.length; i++) {
+                    items.push(localStorage.key(i));
+                }
+                
+                // Clear all localStorage data
+                localStorage.clear();
+                
+                // Show success message
+                const message = document.getElementById('message');
+                message.innerHTML = `
+                    <div class="message success">
+                        <h3>Storage Cleared Successfully!</h3>
+                        <p>The following items were removed: ${items.join(', ') || 'No items found'}</p>
+                        <p>Now <a href="index.html" style="color: #ff8c00;">return to the L1 Availability Tracker</a> and it will load your roster.csv from the data directory.</p>
+                    </div>
+                `;
+                
+                // Add auto-reload option
+                const reloadButton = document.createElement('button');
+                reloadButton.textContent = 'Reload Application Now';
+                reloadButton.style.backgroundColor = '#4CAF50';
+                reloadButton.style.marginTop = '20px';
+                reloadButton.addEventListener('click', function() {
+                    window.location.href = 'index.html';
+                });
+                
+                message.querySelector('.message').appendChild(reloadButton);
+                
+            } catch (error) {
+                const message = document.getElementById('message');
+                message.innerHTML = `
+                    <div class="message error" style="background-color: #333; border-left: 4px solid #f44336;">
+                        <h3>Error Clearing Storage</h3>
+                        <p>${error.message}</p>
+                    </div>
+                `;
+            }
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Roster Debug</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #121212;
+            color: #e0e0e0;
+        }
+        pre {
+            background-color: #333;
+            padding: 10px;
+            border-radius: 4px;
+            overflow: auto;
+            white-space: pre-wrap;
+        }
+        button {
+            background-color: #ff8c00;
+            color: white;
+            padding: 10px 15px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            margin: 10px 0;
+        }
+        .success {
+            color: #4CAF50;
+        }
+        .error {
+            color: #f44336;
+        }
+    </style>
+</head>
+<body>
+    <h1>Roster CSV Debug Tool</h1>
+    <div>
+        <button id="testLoadButton">Test Loading roster.csv</button>
+    </div>
+    <div id="output"></div>
+
+    <script>
+        document.getElementById('testLoadButton').addEventListener('click', function() {
+            const output = document.getElementById('output');
+            output.innerHTML = '<p>Attempting to load roster.csv...</p>';
+            
+            // Create a simple direct XHR request
+            const xhr = new XMLHttpRequest();
+            xhr.open('GET', './data/roster.csv', true);
+            
+            xhr.onreadystatechange = function() {
+                if (xhr.readyState === 4) {
+                    if (xhr.status === 200) {
+                        const csvContent = xhr.responseText;
+                        output.innerHTML += `<p class="success">✓ File loaded successfully!</p>`;
+                        output.innerHTML += `<p>File size: ${csvContent.length} bytes</p>`;
+                        output.innerHTML += `<p>First 100 characters:</p>`;
+                        output.innerHTML += `<pre>${csvContent.substring(0, 100)}...</pre>`;
+                        
+                        // Try to parse the CSV
+                        try {
+                            const lines = csvContent.split('\n');
+                            const headers = lines[0].split(',');
+                            
+                            output.innerHTML += `<p>Headers found: ${headers.join(', ')}</p>`;
+                            output.innerHTML += `<p>Total rows (including header): ${lines.length}</p>`;
+                            
+                            // Show first 3 entries as JSON
+                            const entries = [];
+                            for (let i = 1; i < Math.min(4, lines.length); i++) {
+                                if (!lines[i].trim()) continue;
+                                const values = lines[i].split(',');
+                                const entry = {};
+                                headers.forEach((header, index) => {
+                                    entry[header] = values[index];
+                                });
+                                entries.push(entry);
+                            }
+                            
+                            output.innerHTML += `<p>First 3 entries:</p>`;
+                            output.innerHTML += `<pre>${JSON.stringify(entries, null, 2)}</pre>`;
+                        } catch (error) {
+                            output.innerHTML += `<p class="error">Error parsing CSV: ${error.message}</p>`;
+                        }
+                    } else {
+                        output.innerHTML += `<p class="error">× Failed to load file: ${xhr.status} ${xhr.statusText}</p>`;
+                        output.innerHTML += '<p>Troubleshooting:</p>';
+                        output.innerHTML += '<ol>';
+                        output.innerHTML += '<li>Make sure roster.csv exists in the data folder</li>';
+                        output.innerHTML += '<li>Check that the file is not open in another program</li>';
+                        output.innerHTML += '<li>Try refreshing the page</li>';
+                        output.innerHTML += '<li>Try running the page through a local web server</li>';
+                        output.innerHTML += '</ol>';
+                    }
+                }
+            };
+            
+            xhr.send();
+        });
+    </script>
+</body>
+</html>

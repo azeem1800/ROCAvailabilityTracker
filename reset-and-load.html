@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Reset and Load Roster Data</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 50px auto;
+            padding: 20px;
+            background-color: #121212;
+            color: #e0e0e0;
+            text-align: center;
+        }
+        button {
+            background-color: #ff8c00;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
+            margin: 20px;
+            border-radius: 4px;
+        }
+        button.green {
+            background-color: #4CAF50;
+        }
+        .message {
+            margin-top: 20px;
+            padding: 15px;
+            border-radius: 4px;
+        }
+        .success {
+            background-color: #333;
+            border-left: 4px solid #4CAF50;
+        }
+        .debug-info {
+            text-align: left;
+            background-color: #2a2a2a;
+            padding: 15px;
+            border-radius: 4px;
+            margin: 20px 0;
+            max-height: 300px;
+            overflow: auto;
+        }
+        .step {
+            margin: 20px 0;
+            padding: 15px;
+            background-color: #333;
+            border-radius: 4px;
+            text-align: left;
+        }
+        h3 {
+            margin-top: 0;
+            color: #ff8c00;
+        }
+        .file-input {
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Reset and Load Roster Data</h1>
+    <p>This tool helps you reset the application and load your custom roster data.</p>
+    
+    <div class="step">
+        <h3>Step 1: Verify Your Roster File</h3>
+        <p>Upload your roster.csv file to verify its content:</p>
+        <div id="file-status">
+            <div class="file-input">
+                <input type="file" id="rosterFileInput" accept=".csv">
+                <button id="checkFileBtn" class="green">Verify Roster File</button>
+            </div>
+        </div>
+    </div>
+    
+    <div class="step">
+        <h3>Step 2: Clear Browser Storage</h3>
+        <p>Clear any cached data from the browser:</p>
+        <button id="clearButton">Clear LocalStorage Data</button>
+    </div>
+    
+    <div class="step">
+        <h3>Step 3: Copy Roster File to Data Directory</h3>
+        <p>Make sure your roster.csv file is in the data folder:</p>
+        <div style="text-align: left; margin-left: 20px;">
+            <ol>
+                <li>Copy your verified roster.csv file</li>
+                <li>Navigate to the data folder: <code>l1-availability-tracker\data\</code></li>
+                <li>Paste your file, making sure it's named <strong>roster.csv</strong></li>
+            </ol>
+        </div>
+    </div>
+    
+    <div class="step">
+        <h3>Step 4: Reload Application</h3>
+        <p>Load the application with your roster data:</p>
+        <button id="reloadBtn" class="green">Reload Application Now</button>
+    </div>
+    
+    <div id="message" class="debug-info"></div>
+    
+    <script>
+        // Verify the uploaded roster file
+        document.getElementById('checkFileBtn').addEventListener('click', function() {
+            const fileInput = document.getElementById('rosterFileInput');
+            const fileStatus = document.getElementById('file-status');
+            const file = fileInput.files[0];
+            
+            if (!file) {
+                fileStatus.innerHTML = `
+                    <div style="color: #f44336; font-weight: bold;">Please select a file first</div>
+                    <div class="file-input">
+                        <input type="file" id="rosterFileInput" accept=".csv">
+                        <button id="checkFileBtn" class="green">Verify Roster File</button>
+                    </div>
+                `;
+                
+                // Reattach event listener to new button
+                setTimeout(() => {
+                    document.getElementById('checkFileBtn').addEventListener('click', arguments.callee);
+                }, 0);
+                
+                return;
+            }
+            
+            // Process the file
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                const contents = e.target.result;
+                const lineCount = contents.split('\n').length;
+                const firstLine = contents.split('\n')[0];
+                
+                fileStatus.innerHTML = `
+                    <div style="color: #4CAF50; font-weight: bold;">✓ File verified successfully!</div>
+                    <div>File name: ${file.name}</div>
+                    <div>File size: ${file.size} bytes</div>
+                    <div>Lines: ${lineCount}</div>
+                    <div>First line: ${firstLine}</div>
+                    <div style="margin-top: 15px; border: 1px dashed #4CAF50; padding: 10px; border-radius: 4px;">
+                        <p><strong>Important:</strong> Make sure to copy this file to the data folder as <strong>roster.csv</strong></p>
+                    </div>
+                `;
+                
+                // Show in debug info
+                document.getElementById('message').innerHTML += `
+                    <div><strong>File Verification:</strong> ${file.name} checked successfully</div>
+                    <div>Size: ${file.size} bytes</div>
+                    <div>Lines: ${lineCount}</div>
+                    <div>Header: ${firstLine}</div>
+                    <hr>
+                `;
+            };
+            
+            reader.onerror = function() {
+                fileStatus.innerHTML = `
+                    <div style="color: #f44336; font-weight: bold;">✗ Error reading file</div>
+                    <div class="file-input">
+                        <input type="file" id="rosterFileInput" accept=".csv">
+                        <button id="checkFileBtn" class="green">Try Again</button>
+                    </div>
+                `;
+                
+                // Reattach event listener to new button
+                setTimeout(() => {
+                    document.getElementById('checkFileBtn').addEventListener('click', arguments.callee);
+                }, 0);
+                
+                // Show in debug info
+                document.getElementById('message').innerHTML += `
+                    <div><strong>File Error:</strong> Could not read file</div>
+                    <hr>
+                `;
+            };
+            
+            reader.readAsText(file);
+        });
+        
+        // Clear localStorage and report
+        document.getElementById('clearButton').addEventListener('click', function() {
+            try {
+                // List the items being cleared
+                let items = [];
+                for (let i = 0; i < localStorage.length; i++) {
+                    items.push(localStorage.key(i));
+                }
+                
+                // Clear all localStorage data
+                localStorage.clear();
+                
+                // Show success message
+                const message = document.getElementById('message');
+                message.innerHTML += `
+                    <div><strong>Storage Cleared:</strong></div>
+                    <div>The following items were removed: ${items.join(', ') || 'No items found'}</div>
+                    <hr>
+                `;
+                
+                // Show clear feedback
+                this.textContent = "✓ Storage Cleared!";
+                this.style.backgroundColor = "#4CAF50";
+                
+            } catch (error) {
+                const message = document.getElementById('message');
+                message.innerHTML += `
+                    <div><strong>Storage Error:</strong> ${error.message}</div>
+                    <hr>
+                `;
+                
+                this.textContent = "✗ Error Clearing Storage";
+                this.style.backgroundColor = "#f44336";
+            }
+        });
+        
+        // Reload the application with timestamp to force cache bypass
+        document.getElementById('reloadBtn').addEventListener('click', function() {
+            document.getElementById('message').innerHTML += `
+                <div><strong>Reloading Application:</strong> Redirecting to index.html...</div>
+            `;
+            
+            const timestamp = new Date().getTime();
+            window.location.href = `index.html?t=${timestamp}`;
+        });
+    </script>
+</body>
+</html>

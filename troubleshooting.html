@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ROC Availability Tracker - Troubleshooting Guide</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            color: #333;
+        }
+        
+        h1 {
+            color: #3498db;
+            border-bottom: 1px solid #ddd;
+            padding-bottom: 10px;
+        }
+        
+        h2 {
+            color: #2980b9;
+            margin-top: 30px;
+        }
+        
+        .issue {
+            background-color: #f9f9f9;
+            border-left: 4px solid #3498db;
+            padding: 15px;
+            margin: 20px 0;
+            border-radius: 0 4px 4px 0;
+        }
+        
+        .solution {
+            background-color: #f1f9f1;
+            border-left: 4px solid #2ecc71;
+            padding: 15px;
+            margin: 10px 0 20px;
+            border-radius: 0 4px 4px 0;
+        }
+        
+        code {
+            background-color: #f1f1f1;
+            padding: 2px 5px;
+            border-radius: 3px;
+            font-family: Consolas, Monaco, 'Courier New', monospace;
+        }
+        
+        .note {
+            background-color: #fff8dc;
+            padding: 10px;
+            border-left: 4px solid #f1c40f;
+            margin: 10px 0;
+        }
+        
+        a {
+            color: #3498db;
+            text-decoration: none;
+        }
+        
+        a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    <h1>ROC Availability Tracker - Troubleshooting Guide</h1>
+    
+    <p>
+        This guide will help you resolve common issues you might encounter when using the ROC Availability Tracker application.
+        If you're experiencing problems, please try the solutions below before reaching out for further assistance.
+    </p>
+    
+    <div class="note">
+        <strong>Note:</strong> For quickest results, try using the "Load Sample Data" button instead of uploading a file.
+        This should work even if file uploads are problematic.
+    </div>
+    
+    <h2>Application Won't Open</h2>
+    
+    <div class="issue">
+        <strong>Issue:</strong> The application doesn't open when clicking on index.html
+    </div>
+    
+    <div class="solution">
+        <strong>Solutions:</strong>
+        <ol>
+            <li>Try opening the file with a specific browser (right-click index.html → Open with → Choose Chrome or Firefox)</li>
+            <li>Try running a local server:
+                <ul>
+                    <li>Open Command Prompt or PowerShell in the l1-availability-tracker directory</li>
+                    <li>If you have Python installed, run: <code>python -m http.server 8000</code></li>
+                    <li>Open <a href="http://localhost:8000">http://localhost:8000</a> in your browser</li>
+                </ul>
+            </li>
+            <li>Check your browser's console for errors (F12 → Console tab)</li>
+        </ol>
+    </div>
+    
+    <h2>CSV File Upload Errors</h2>
+    
+    <div class="issue">
+        <strong>Issue:</strong> Getting "Error parsing CSV file: Too few fields" or similar errors
+    </div>
+    
+    <div class="solution">
+        <strong>Solutions:</strong>
+        <ol>
+            <li>Make sure your CSV file uses commas (,) as separators</li>
+            <li>Ensure your file has the required column headers: Name, Bio, Certifications, Schedule</li>
+            <li>Try using the included sample-roster.csv as a template</li>
+            <li>If using Excel to create CSV files:
+                <ul>
+                    <li>Save as "CSV (Comma delimited) (*.csv)"</li>
+                    <li>When prompted about features not compatible with CSV, click "Yes"</li>
+                </ul>
+            </li>
+            <li>If fields contain commas, ensure they're enclosed in double quotes</li>
+        </ol>
+        
+        <p>Example of correct CSV format:</p>
+        <code>
+            Name,Bio,Certifications,Schedule<br>
+            John Smith,Network expert,"CompTIA A+, Network+",9-17<br>
+            Jane Doe,Software specialist,Microsoft Certified,8-16
+        </code>
+    </div>
+    
+    <h2>No Staff Showing as Available</h2>
+    
+    <div class="issue">
+        <strong>Issue:</strong> File uploads successfully but no staff members are shown as available
+    </div>
+    
+    <div class="solution">
+        <strong>Solutions:</strong>
+        <ol>
+            <li>Check your Schedule format - the application supports:
+                <ul>
+                    <li>Simple time range (e.g., <code>9-17</code> for 9 AM to 5 PM)</li>
+                    <li>Date-specific schedules (e.g., <code>15/4: 9-17</code>)</li>
+                    <li>Day-range schedules (e.g., <code>Monday-Friday: 9-17</code>)</li>
+                </ul>
+            </li>
+            <li>Make sure the schedule includes the current time. Use the "Load Sample Data" button to see examples of correctly formatted schedules.</li>
+            <li>Check the browser console (F12 → Console tab) for any error messages</li>
+        </ol>
+    </div>
+    
+    <h2>JavaScript Errors</h2>
+    
+    <div class="issue">
+        <strong>Issue:</strong> JavaScript error alerts or console errors
+    </div>
+    
+    <div class="solution">
+        <strong>Solutions:</strong>
+        <ol>
+            <li>Make sure all the library files are properly downloaded in the lib directory:
+                <ul>
+                    <li>xlsx.full.min.js</li>
+                    <li>papaparse.min.js</li>
+                    <li>dayjs.min.js</li>
+                </ul>
+            </li>
+            <li>Try clearing your browser cache (Ctrl+F5 or Cmd+Shift+R)</li>
+            <li>Ensure JavaScript is enabled in your browser</li>
+            <li>Try a different browser (Chrome or Firefox recommended)</li>
+        </ol>
+    </div>
+    
+    <h2>Data Not Being Saved</h2>
+    
+    <div class="issue">
+        <strong>Issue:</strong> Data doesn't persist between sessions
+    </div>
+    
+    <div class="solution">
+        <strong>Solutions:</strong>
+        <ol>
+            <li>Make sure cookies and local storage are enabled in your browser</li>
+            <li>Try using a different browser</li>
+            <li>If using private/incognito mode, localStorage won't persist - try regular browsing mode</li>
+        </ol>
+    </div>
+    
+    <h2>Still Having Issues?</h2>
+    
+    <p>
+        If you're still experiencing problems after trying these solutions:
+    </p>
+    
+    <ol>
+        <li>Check the browser console (F12 → Console tab) for specific error messages</li>
+        <li>Try using the most recent version of Chrome or Firefox</li>
+        <li>Ensure all files are in the correct directory structure as outlined in the README</li>
+        <li>If modifying the code, make sure syntax is correct and all files are saved properly</li>
+    </ol>
+    
+    <div class="note">
+        <strong>Remember:</strong> The "Load Sample Data" button is the most reliable way to test the application functionality without dealing with file upload issues.
+    </div>
+    
+    <p>
+        <a href="./index.html">← Back to Application</a>
+    </p>
+    
+    <footer style="margin-top: 50px; border-top: 1px solid #ddd; padding-top: 20px; color: #666; font-size: 0.9em;">
+        ROC Availability Tracker - Troubleshooting Guide
+    </footer>
+</body>
+</html>
