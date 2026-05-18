@@ -39,7 +39,7 @@ class App {
         const rosterData = [
             {
                 "Name": "Komal Muruskar",
-                "Bio": "ROC expert with 3 years of IT experience",
+                "Bio": "ROC expert with 3+ years of IT experience",
                 "Certifications": "AI white belt",
                 "Schedule": "Wednesday-Sunday: 03-11",
                 "Team": "Support Team",
@@ -47,7 +47,7 @@ class App {
             },
 			{
                 "Name": "Ganesh Barkade",
-                "Bio": "ROC expert with 3 years of IT experience",
+                "Bio": "ROC expert with 10+ years of IT experience",
                 "Certifications": "AI white belt",
                 "Schedule": "Monday-Friday: 09-18",
                 "Team": "Support Team",
@@ -55,7 +55,7 @@ class App {
             },
             {
                 "Name": "Tarishi Bishnoi",
-                "Bio": "ROC expert with 3 years of IT experience",
+                "Bio": "ROC expert with 3+ years of IT experience",
                 "Certifications": "AWS Certified: Cloud practitioner",
                 "Schedule": "Monday-Friday: 09-18",
                 "Team": "Development Team",
@@ -63,7 +63,7 @@ class App {
             },
             {
                 "Name": "Mayuresh Rajput",
-                "Bio": "ROC expert with 3 years of IT experience",
+                "Bio": "ROC expert with 3+ years of IT experience",
                 "Certifications": "AI white belt",
                 "Schedule": "Friday-Tuesday: 03-11",
                 "Team": "Support Team",
@@ -71,7 +71,7 @@ class App {
             },
             {
                 "Name": "Gitanjali",
-                "Bio": "ROC expert with 3 years of IT experience",
+                "Bio": "ROC expert with 10+ years of IT experience",
                 "Certifications": "AI white belt",
                 "Schedule": "Monday-Friday: 03-11",
                 "Team": "Development Team",
@@ -79,7 +79,7 @@ class App {
             },
             {
                 "Name": "Aryamol",
-                "Bio": "ROC expert with 3 years of IT experience",
+                "Bio": "ROC expert with 2+ years of IT experience",
                 "Certifications": "AI white belt",
                 "Schedule": "Monday-Friday: 09-18",
                 "Team": "QA Team",
@@ -87,7 +87,7 @@ class App {
             },
             {
                 "Name": "Harimar",
-                "Bio": "ROC expert with 13 years of IT experience",
+                "Bio": "ROC expert with 13+ years of IT experience",
                 "Certifications": "AI white belt",
                 "Schedule": "Friday-Tuesday: 18-03",
                 "Team": "Operations Team",
@@ -95,7 +95,7 @@ class App {
             },
             {
                 "Name": "Deepak",
-                "Bio": "ROC expert with 3 years of IT experience",
+                "Bio": "ROC expert with 3+ years of IT experience",
                 "Certifications": "AI white belt",
                 "Schedule": "Wednesday-Sunday: 18-03",
                 "Team": "Support Team",
@@ -103,7 +103,7 @@ class App {
             },
             {
                 "Name": "Suresh",
-                "Bio": "ROC expert with 10 years of IT experience",
+                "Bio": "ROC expert with 10+ years of IT experience",
                 "Certifications": "AI white belt",
                 "Schedule": "Monday-Friday: 18-03",
                 "Team": "Development Team",
@@ -111,7 +111,7 @@ class App {
             },
             {
                 "Name": "Sanjay",
-                "Bio": "ROC expert with 20 years of IT experience",
+                "Bio": "ROC expert with 20+ years of IT experience",
                 "Certifications": "AI white belt",
                 "Schedule": "Saturday-Wednesday: 09-18",
                 "Team": "Management Team",
@@ -119,7 +119,7 @@ class App {
             },
             {
                 "Name": "Pranita",
-                "Bio": "ROC expert with 3 years of IT experience",
+                "Bio": "ROC expert with 3+ years of IT experience",
                 "Certifications": "AI white belt",
                 "Schedule": "Tuesday-Saturday: 09-18",
                 "Team": "QA Team",
@@ -127,7 +127,7 @@ class App {
             },
             {
                 "Name": "Binil",
-                "Bio": "ROC expert with 13 years of IT experience",
+                "Bio": "ROC expert with 10+ years of IT experience",
                 "Certifications": "AI white belt",
                 "Schedule": "Thursday-Monday: 09-18",
                 "Team": "Operations Team",
@@ -135,7 +135,7 @@ class App {
             },
             {
                 "Name": "Kuldeep",
-                "Bio": "ROC expert with 13 years of IT experience",
+                "Bio": "ROC expert with 13+ years of IT experience",
                 "Certifications": "AI white belt",
                 "Schedule": "Monday-Friday: 03-11",
                 "Team": "Management Team",
